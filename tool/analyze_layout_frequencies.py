@@ -1,21 +1,36 @@
 #!/usr/bin/env python3
-"""Reproduce the character frequencies used by the Chordtype layout."""
+"""Reproduce the character and bigram frequencies used by the Chordtype layout.
+
+English corpora: DailyDialog (IJCNLP 2017) and Cornell Movie-Dialogs.
+Russian corpus: Toloka Persona Chat Rus.
+Optional sanity-check: Persona-Chat (ParlAI).
+
+Requires only the Python standard library.  Install ``peyo`` (see
+``tool/requirements.txt``) for optional Russian ё restoration.
+"""
 
 from __future__ import annotations
 
 import argparse
 import collections
 import csv
+import sys
 import html
 import io
 import json
 import re
 import tarfile
 import unicodedata
-import xml.etree.ElementTree as ET
 import zipfile
 from collections.abc import Iterable, Iterator
 from pathlib import Path
+
+try:
+    from peyo import yoify
+
+    _HAS_PEYO = True
+except ImportError:  # peyo is optional; ё restoration is skipped without it
+    _HAS_PEYO = False
 
 
 ENGLISH_LETTERS = "abcdefghijklmnopqrstuvwxyz"
@@ -80,22 +95,59 @@ def normalize(text: str) -> str:
     return re.sub(r"\s+", " ", normalized.translate(TRANSLATION)).strip()
 
 
-def count_messages(messages: Iterable[str], letters: str) -> dict[str, object]:
+def count_messages(
+    messages: Iterable[str],
+    letters: str,
+    *,
+    yoify: bool = False,
+) -> dict[str, object]:
+    """Count character and bigram frequencies in *messages*.
+
+    Parameters
+    ----------
+    messages:
+        Iterable of raw message strings.
+    letters:
+        Alphabet string for the target language.
+    yoify:
+        If ``True`` and *peyo* is installed, apply ё restoration to every
+        normalised message before counting.
+    """
+
+    if yoify and not _HAS_PEYO:
+        print(
+            "WARNING: --yoify requested but peyo is not installed; "
+            "skipping ё restoration",
+            file=sys.stderr,
+        )
+        yoify = False
+
     supported = set(letters + DIGITS + "".join(PUNCTUATION))
     counts: collections.Counter[str] = collections.Counter()
+    bigram_counts: collections.Counter[str] = collections.Counter()
     uppercase_count = 0
     message_count = 0
     raw_character_count = 0
 
     for raw_message in messages:
         message = normalize(raw_message)
+        if yoify:
+            from peyo import yoify as _yoify  # already guarded above
+
+            message = _yoify(message)
         if not message:
             continue
 
         message_count += 1
         raw_character_count += len(message)
         uppercase_count += sum(character in letters.upper() for character in message)
-        counts.update(character for character in message.lower() if character in supported)
+
+        lowered = message.lower()
+        stream = [ch for ch in lowered if ch in supported]
+        counts.update(stream)
+        bigram_counts.update(
+            stream[i] + stream[i + 1] for i in range(len(stream) - 1)
+        )
 
     supported_count = sum(counts.values())
     percentages = {
@@ -106,6 +158,13 @@ def count_messages(messages: Iterable[str], letters: str) -> dict[str, object]:
         key=lambda character: percentages.get(character, 0),
         reverse=True,
     )
+
+    bigram_total = sum(bigram_counts.values())
+    bigram_percentages = [
+        [bigram, round(100 * count / bigram_total, 4)]
+        for bigram, count in bigram_counts.most_common()
+        if 100 * count / bigram_total >= 0.01
+    ]
 
     return {
         "messages": message_count,
@@ -130,19 +189,51 @@ def count_messages(messages: Iterable[str], letters: str) -> dict[str, object]:
             [character, round(percentages.get(character, 0), 4)]
             for character in PUNCTUATION
         ],
+        "bigrams": bigram_percentages,
     }
 
 
-def nus_sms_messages(archive_path: Path) -> Iterator[str]:
+def dailydialog_messages(archive_path: Path) -> Iterator[str]:
+    """Yield utterances from a DailyDialog zip archive.
+
+    Each line of ``dialogues_text.txt`` is one dialogue with utterances
+    separated by the ``__eou__`` delimiter.
+    """
+
     with zipfile.ZipFile(archive_path) as archive:
-        with archive.open("smsCorpus_en_2015.03.09_all.xml") as stream:
-            for _, element in ET.iterparse(stream, events=("end",)):
-                if element.tag != "message":
-                    continue
-                text = element.findtext("text")
+        candidates = [n for n in archive.namelist() if n.endswith("dialogues_text.txt")]
+        if not candidates:
+            raise FileNotFoundError("dialogues_text.txt not found in archive")
+        with archive.open(candidates[0]) as stream:
+            for raw_line in stream:
+                line = raw_line.decode("utf-8").rstrip("\n")
+                for utterance in line.split("__eou__"):
+                    utterance = utterance.strip()
+                    if utterance:
+                        yield utterance
+
+
+def cornell_messages(archive_path: Path) -> Iterator[str]:
+    """Yield dialogue lines from a Cornell Movie-Dialogs zip archive.
+
+    The file ``movie_lines.txt`` contains lines in the format::
+
+        L123 +++$+++ u456 +++$+++ m789 +++$+++ NAME +++$+++ text
+
+    The last field is the actual utterance text.
+    """
+
+    with zipfile.ZipFile(archive_path) as archive:
+        candidates = [n for n in archive.namelist() if n.endswith("movie_lines.txt")]
+        if not candidates:
+            raise FileNotFoundError("movie_lines.txt not found in archive")
+        with archive.open(candidates[0]) as stream:
+            for raw_line in stream:
+                line = raw_line.decode("latin-1", errors="replace").rstrip("\n")
+                parts = line.split(" +++$+++ ")
+                text = parts[-1].strip()
                 if text:
                     yield text
-                element.clear()
 
 
 def toloka_messages(archive_path: Path) -> Iterator[str]:
@@ -182,12 +273,20 @@ def personachat_messages(archive_path: Path) -> Iterator[str]:
 
 
 def parse_args() -> argparse.Namespace:
+    """Parse command-line arguments."""
+
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
-        "--nus-sms",
+        "--dailydialog",
         required=True,
         type=Path,
-        help="NUS English XML ZIP archive",
+        help="DailyDialog ZIP archive",
+    )
+    parser.add_argument(
+        "--cornell",
+        required=True,
+        type=Path,
+        help="Cornell Movie-Dialogs ZIP archive",
     )
     parser.add_argument(
         "--toloka",
@@ -200,16 +299,26 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         help="optional original Persona-Chat TGZ used as an English sanity check",
     )
+    parser.add_argument(
+        "--yoify",
+        action="store_true",
+        help="restore ё in Russian text (requires peyo)",
+    )
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
     results = {
-        "en_nus_sms": count_messages(
-            nus_sms_messages(args.nus_sms), ENGLISH_LETTERS
+        "en_dailydialog": count_messages(
+            dailydialog_messages(args.dailydialog), ENGLISH_LETTERS
         ),
-        "ru_toloka": count_messages(toloka_messages(args.toloka), RUSSIAN_LETTERS),
+        "en_cornell": count_messages(
+            cornell_messages(args.cornell), ENGLISH_LETTERS
+        ),
+        "ru_toloka": count_messages(
+            toloka_messages(args.toloka), RUSSIAN_LETTERS, yoify=args.yoify
+        ),
     }
     if args.personachat is not None:
         results["en_personachat_check"] = count_messages(
