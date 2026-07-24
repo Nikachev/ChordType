@@ -12,3 +12,7 @@ build/
 
 # macOS
 .DS_Store
+
+# Corpus data (downloaded separately)
+.corpora/
+__pycache__/

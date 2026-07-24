@@ -5,8 +5,8 @@ English corpora: DailyDialog (IJCNLP 2017) and Cornell Movie-Dialogs.
 Russian corpus: Toloka Persona Chat Rus.
 Optional sanity-check: Persona-Chat (ParlAI).
 
-Requires only the Python standard library.  Install ``peyo`` (see
-``tool/requirements.txt``) for optional Russian ё restoration.
+Requires only the Python standard library.  The bundled ``yoficator``
+module provides optional Russian ё restoration.
 """
 
 from __future__ import annotations
@@ -26,11 +26,11 @@ from collections.abc import Iterable, Iterator
 from pathlib import Path
 
 try:
-    from peyo import yoify
+    from yoficator import yoify as _yoify_func
 
-    _HAS_PEYO = True
-except ImportError:  # peyo is optional; ё restoration is skipped without it
-    _HAS_PEYO = False
+    _HAS_YOIFY = True
+except ImportError:  # yoficator is optional; ё restoration is skipped without it
+    _HAS_YOIFY = False
 
 
 ENGLISH_LETTERS = "abcdefghijklmnopqrstuvwxyz"
@@ -110,13 +110,13 @@ def count_messages(
     letters:
         Alphabet string for the target language.
     yoify:
-        If ``True`` and *peyo* is installed, apply ё restoration to every
-        normalised message before counting.
+        If ``True`` and *yoficator* is installed, apply ё restoration to
+        every normalised message before counting.
     """
 
-    if yoify and not _HAS_PEYO:
+    if yoify and not _HAS_YOIFY:
         print(
-            "WARNING: --yoify requested but peyo is not installed; "
+            "WARNING: --yoify requested but yoficator is not available; "
             "skipping ё restoration",
             file=sys.stderr,
         )
@@ -132,9 +132,7 @@ def count_messages(
     for raw_message in messages:
         message = normalize(raw_message)
         if yoify:
-            from peyo import yoify as _yoify  # already guarded above
-
-            message = _yoify(message)
+            message = _yoify_func(message)
         if not message:
             continue
 
@@ -302,7 +300,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--yoify",
         action="store_true",
-        help="restore ё in Russian text (requires peyo)",
+        help="restore ё in Russian text (requires yoficator)",
     )
     return parser.parse_args()
 

@@ -82,10 +82,12 @@ def popcount(mask: int) -> int:
 # ---------------------------------------------------------------------------
 
 # Default per-finger penalties.
+# Index finger is cheapest (most dexterous on a physical pager device),
+# thumbs are mid-range, pinky is most expensive.
 DEFAULT_FINGER_PENALTIES: dict[int, float] = {
-    BIT_T1: 0.5,
-    BIT_T2: 0.7,
-    BIT_I: 1.0,
+    BIT_I: 0.5,
+    BIT_T1: 0.7,
+    BIT_T2: 0.9,
     BIT_M: 1.2,
     BIT_R: 1.8,
     BIT_P: 2.5,

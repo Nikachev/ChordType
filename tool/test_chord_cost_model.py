@@ -71,12 +71,12 @@ class TestChordCost(unittest.TestCase):
         self.assertLess(max_single, min_multi)
 
     def test_thumb_only_cheapest_single(self) -> None:
-        """Among single-finger chords, T1 should be the cheapest."""
+        """Among single-finger chords, I (index) should be the cheapest."""
         costs = {b: self.model.chord_cost(b) for b in FINGER_BITS}
         self.assertEqual(
             min(costs, key=costs.get),  # type: ignore[arg-type]
-            BIT_T1,
-            f"T1 should be cheapest single-finger chord, got costs: {costs}",
+            BIT_I,
+            f"I should be cheapest single-finger chord, got costs: {costs}",
         )
 
     def test_more_fingers_more_cost(self) -> None:

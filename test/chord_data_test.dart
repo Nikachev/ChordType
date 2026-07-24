@@ -132,20 +132,20 @@ void main() {
     );
     expect(
       englishLayout.languageSymbols.values.toSet(),
-      <String>{'#', '*', '/', '&', '~', r'$', '['},
+      <String>{r'$', '[', ']', '&', '_', '+', '='},
     );
   });
 
-  test('all eight RU punctuation pairs use identical shared chords', () {
+  test('all eight shared punctuation pairs use identical shared chords', () {
     const Map<int, String> expected = <int, String>{
-      44: '.',
+      26: '.',
       21: '?',
-      25: ',',
+      14: ',',
       35: ')',
-      7: "'",
-      23: ':',
-      43: '-',
-      15: '=',
+      37: "'",
+      46: '!',
+      29: '-',
+      15: '(',
     };
 
     for (final MapEntry<int, String> entry in expected.entries) {
@@ -157,7 +157,7 @@ void main() {
 
     expect(
       expected.values.map(shiftedOutputFor).toSet(),
-      <String>{'>', '<', '!', '(', '"', ';', '_', '+'},
+      <String>{'%', ';', '*', '>', '/', '<', '"', ':'},
     );
   });
 
@@ -246,9 +246,9 @@ void main() {
   test('Shift output applies to base letters and punctuation only', () {
     expect(shiftedOutputFor('a'), 'A');
     expect(shiftedOutputFor('я'), 'Я');
-    expect(shiftedOutputFor('?'), '!');
-    expect(shiftedOutputFor(')'), '(');
-    expect(shiftedOutputFor('['), ']');
+    expect(shiftedOutputFor('?'), ';');
+    expect(shiftedOutputFor(')'), '>');
+    expect(shiftedOutputFor('['), '~');
     expect(shiftedOutputFor('{'), '{');
     expect(shiftedOutputFor('}'), '}');
     expect(shiftedOutputFor('1'), '1');

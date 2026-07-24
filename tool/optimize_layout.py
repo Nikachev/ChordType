@@ -62,26 +62,29 @@ FIXED_MASKS: dict[int, str] = {
 }
 
 # Shared punctuation keys: base → shifted.
+# Determined by combined EN+RU frequency; rarer symbol on Shift.
 SHARED_PUNCTUATION: dict[str, str] = {
-    ".": ">",
-    "?": "!",
-    ",": "<",
-    ")": "(",
-    "'": '"',
-    ":": ";",
-    "-": "_",
-    "=": "+",
+    ".": "%",
+    ",": "*",
+    "?": ";",
+    "'": "/",
+    ")": ">",
+    "!": "<",
+    "-": '"',
+    "(": ":",
 }
 
 # EN-only symbol pairs: base → shifted.
+# These masks show Russian letters in RU mode.
+# Forced EN-only: ` @ # & ~
 EN_ONLY_SYMBOLS: dict[str, str] = {
-    "#": "@",
-    "*": "^",
-    "/": "\\",
-    "&": "|",
-    "~": "`",
-    "$": "%",
-    "[": "]",
+    "$": "`",
+    "=": "@",
+    "]": "#",
+    "+": "|",
+    "[": "~",
+    "_": "^",
+    "&": "\\",
 }
 
 ENGLISH_LETTERS = "abcdefghijklmnopqrstuvwxyz"
