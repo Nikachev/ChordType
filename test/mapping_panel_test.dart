@@ -81,7 +81,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(
-      find.byKey(const ValueKey<String>('mapping-base-output-. / >')),
+      find.byKey(const ValueKey<String>('mapping-base-output-. / %')),
       findsOneWidget,
     );
     expect(find.text('Numbers & symbols'), findsOneWidget);

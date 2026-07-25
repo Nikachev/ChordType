@@ -54,7 +54,7 @@ const List<TrainingCourse> courses = <TrainingCourse>[
         id: 'en-chat-01',
         stage: LessonStage.foundations,
         title: 'Core chords I',
-        focus: 'e a o t and Space',
+        focus: 't e o a and Space',
         target: 'tea toe eat ate oat tea toe',
       ),
       TrainingLesson(
@@ -243,7 +243,7 @@ const List<TrainingCourse> courses = <TrainingCourse>[
         id: 'ru-chat-01',
         stage: LessonStage.foundations,
         title: 'Основные аккорды I',
-        focus: 'о е а т и пробел',
+        focus: 'а о е т и пробел',
         target: 'ооо еее ааа ттт то та те от',
       ),
       TrainingLesson(
@@ -312,7 +312,8 @@ const List<TrainingCourse> courses = <TrainingCourse>[
         skills: <LessonSkill>{
           LessonSkill.shift,
           LessonSkill.enter,
-          LessonSkill.numbersAndSymbols
+          LessonSkill.numbersAndSymbols,
+          LessonSkill.layoutSwitch
         },
         title: 'Время и числа',
         focus: 'прямой слой цифр и символов в договорённостях',
@@ -348,7 +349,7 @@ const List<TrainingCourse> courses = <TrainingCourse>[
         target: 'Отправь "черновик" для @oleg_home в #plans (важно).\n'
             'Открой https://example.com/chat?mode=work; отметь {готово}, '
             'сравни 3<5>1, напиши "да" и \'нет\', '
-            'затем проверь слово-слово.',
+            'затем проверь слово-слово. Скидка 10% и 5*5.',
       ),
       TrainingLesson(
         id: 'ru-chat-13',

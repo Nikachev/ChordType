@@ -19,8 +19,8 @@ void main() {
         activeModifier: null,
       );
 
-      expect(english?.text, 'e');
-      expect(russian?.text, 'о');
+      expect(english?.text, 't');
+      expect(russian?.text, 'а');
     });
 
     test('gives controls and modifiers priority over armed layers', () {
@@ -48,7 +48,7 @@ void main() {
         activeModifier: ChordModifier.numbersAndSymbols,
       );
 
-      expect(layerAction?.text, '2');
+      expect(layerAction?.text, '0');
     });
   });
 
@@ -56,23 +56,23 @@ void main() {
     test('plans direct, shifted base, numbers/symbols, and Enter input', () {
       expect(
         _planMasks(engine, 'e'),
-        <int>[8],
+        <int>[32],
       );
       expect(
         _planMasks(engine, 'E'),
-        <int>[shiftChord, 8],
+        <int>[shiftChord, 32],
       );
       expect(
         _planMasks(engine, '!'),
-        <int>[shiftChord, 21],
+        <int>[46],
       );
       expect(
-        _planMasks(engine, '2'),
+        _planMasks(engine, '0'),
         <int>[numbersAndSymbolsChord, 8],
       );
       expect(
         _planMasks(engine, '}'),
-        <int>[numbersAndSymbolsChord, 17],
+        <int>[numbersAndSymbolsChord, 6],
       );
       expect(
         _planMasks(engine, '\n'),
@@ -86,7 +86,7 @@ void main() {
         inputLanguage: CourseLanguage.english,
       );
 
-      expect(steps.map((ChordStep step) => step.mask), <int>[47, 8]);
+      expect(steps.map((ChordStep step) => step.mask), <int>[47, 32]);
       expect(steps.first.switchTo, CourseLanguage.russian);
       expect(steps.last.switchTo, isNull);
     });
@@ -99,7 +99,7 @@ void main() {
 
       expect(
         steps.map((ChordStep step) => step.mask),
-        <int>[layoutSwitchChord, shiftChord, 41],
+        <int>[layoutSwitchChord, shiftChord, 31],
       );
       expect(steps.first.switchTo, CourseLanguage.english);
     });

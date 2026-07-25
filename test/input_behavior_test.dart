@@ -34,7 +34,7 @@ void main() {
     await tester.pumpWidget(ChordtypeApp(storage: MemoryAppStorage()));
     await tester.pumpAndSettle();
 
-    await _sendMask(tester, 8);
+    await _sendMask(tester, 32);
     await tester.pumpAndSettle();
 
     expect(_progress(tester), greaterThan(0));
@@ -51,7 +51,7 @@ void main() {
 
     expect(_progress(tester), 0);
     expect(find.text('Press Backspace to fix the mistake'), findsNothing);
-    expect(_keyColor(tester, 2), _colors(tester).tertiaryContainer);
+    expect(_keyColor(tester, 8), _colors(tester).tertiaryContainer);
   });
 
   testWidgets(
@@ -63,7 +63,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byKey(const ValueKey<String>('chord-hint')), findsOneWidget);
-      expect(_keyColor(tester, 2), _colors(tester).tertiaryContainer);
+      expect(_keyColor(tester, 8), _colors(tester).tertiaryContainer);
 
       await tester.tap(find.byTooltip('Hide chord hint'));
       await tester.pumpAndSettle();
@@ -77,7 +77,7 @@ void main() {
         isFalse,
       );
 
-      await _sendMask(tester, 8);
+      await _sendMask(tester, 32);
       await tester.pumpAndSettle();
 
       expect(find.byKey(const ValueKey<String>('chord-hint')), findsOneWidget);
@@ -118,7 +118,7 @@ void main() {
 
     await _sendMask(tester, shiftChord);
     await _sendMask(tester, numbersAndSymbolsChord);
-    await _sendMask(tester, 6);
+    await _sendMask(tester, 17);
     await tester.pumpAndSettle();
 
     expect(
