@@ -121,7 +121,7 @@ const Map<int, String> numbersAndSymbolsLayer = <int, String>{
 
 const Map<String, String> _shiftedOutputs = <String, String>{
   '.': '+',
-  ',': ']',
+  ',': '^',
   ')': '%',
   '?': '=',
   '!': '*',
@@ -130,10 +130,10 @@ const Map<String, String> _shiftedOutputs = <String, String>{
   '(': '/',
   '"': '<',
   "'": '`',
-  r'$': '@',
+  '@': r'$',
   '#': '~',
   '&': '|',
-  '[': '^',
+  '[': ']',
   '_': '\\',
   'ь': 'ъ',
 };
@@ -257,10 +257,10 @@ const ChordLayout englishLayout = ChordLayout(
   },
   languageSymbols: <int, String>{
     19: "'",
-    29: r'$',
-    45: '[',
-    27: '_',
-    23: '&',
+    29: '[',
+    45: '&',
+    27: '@',
+    23: '_',
     43: '#',
   },
 );

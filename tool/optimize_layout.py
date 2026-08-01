@@ -66,7 +66,7 @@ FIXED_MASKS: dict[int, str] = {
 # 9 pairs (32 RU letters → 6 EN-only → 47-6-6-26 = 9 shared).
 SHARED_PUNCTUATION: dict[str, str] = {
     ".": "+",
-    ",": "]",
+    ",": "^",
     "?": "=",
     ")": "%",
     "!": "*",
@@ -78,13 +78,13 @@ SHARED_PUNCTUATION: dict[str, str] = {
 
 # EN-only symbol pairs: base → shifted.
 # These masks show Russian letters in RU mode.
-# Forced EN-only: ` @ # & ~ $ '
+# Forced EN-only: ` @ # & ~ $ ' [ ]
 EN_ONLY_SYMBOLS: dict[str, str] = {
     "'": "`",
-    "$": "@",
+    "@": "$",
     "#": "~",
     "&": "|",
-    "[": "^",
+    "[": "]",
     "_": "\\",
 }
 

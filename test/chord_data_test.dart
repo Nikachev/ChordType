@@ -131,7 +131,7 @@ void main() {
     );
     expect(
       englishLayout.languageSymbols.values.toSet(),
-      <String>{"'", r'$', '[', '_', '&', '#'},
+      <String>{"'", '[', '&', '@', '_', '#'},
     );
   });
 
@@ -157,7 +157,7 @@ void main() {
 
     expect(
       expected.values.map(shiftedOutputFor).toSet(),
-      <String>{'+', ']', '%', '=', '*', ';', '>', '/', '<'},
+      <String>{'+', '^', '%', '=', '*', ';', '>', '/', '<'},
     );
   });
 
@@ -248,7 +248,7 @@ void main() {
     expect(shiftedOutputFor('я'), 'Я');
     expect(shiftedOutputFor('?'), '=');
     expect(shiftedOutputFor(')'), '%');
-    expect(shiftedOutputFor('['), '^');
+    expect(shiftedOutputFor('['), ']');
     expect(shiftedOutputFor('{'), '{');
     expect(shiftedOutputFor('}'), '}');
     expect(shiftedOutputFor('1'), '1');

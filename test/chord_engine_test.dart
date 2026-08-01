@@ -99,7 +99,7 @@ void main() {
 
       expect(
         steps.map((ChordStep step) => step.mask),
-        <int>[layoutSwitchChord, shiftChord, 29],
+        <int>[layoutSwitchChord, 27],
       );
       expect(steps.first.switchTo, CourseLanguage.english);
     });

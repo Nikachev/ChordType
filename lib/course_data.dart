@@ -348,7 +348,7 @@ const List<TrainingCourse> courses = <TrainingCourse>[
         target: 'Отправь "черновик" для @oleg_home в #plans (важно).\n'
             'Открой https://example.com/chat?mode=work; отметь {готово}, '
             'сравни 3<5>1, напиши "да" и \'нет\', '
-            'затем проверь слово-слово. Скидка 10%, итого 5*5=] готово.',
+            'затем проверь слово-слово. Скидка 10%, итого 5*5^ готово.',
       ),
       TrainingLesson(
         id: 'ru-chat-13',
