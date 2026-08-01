@@ -63,32 +63,33 @@ FIXED_MASKS: dict[int, str] = {
 
 # Shared punctuation keys: base → shifted.
 # Determined by combined EN+RU frequency; rarer symbol on Shift.
+# 9 pairs (32 RU letters → 6 EN-only → 47-6-6-26 = 9 shared).
 SHARED_PUNCTUATION: dict[str, str] = {
-    ".": "%",
-    ",": "*",
-    "?": ";",
-    "'": "/",
-    ")": ">",
-    "!": "<",
-    "-": '"',
-    "(": ":",
+    ".": "+",
+    ",": "]",
+    "?": "=",
+    ")": "%",
+    "!": "*",
+    "-": ";",
+    "(": "/",
+    ":": ">",
+    '"': "<",
 }
 
 # EN-only symbol pairs: base → shifted.
 # These masks show Russian letters in RU mode.
-# Forced EN-only: ` @ # & ~
+# Forced EN-only: ` @ # & ~ $ '
 EN_ONLY_SYMBOLS: dict[str, str] = {
-    "$": "`",
-    "=": "@",
-    "]": "#",
-    "+": "|",
-    "[": "~",
-    "_": "^",
-    "&": "\\",
+    "'": "`",
+    "$": "@",
+    "#": "~",
+    "&": "|",
+    "[": "^",
+    "_": "\\",
 }
 
 ENGLISH_LETTERS = "abcdefghijklmnopqrstuvwxyz"
-RUSSIAN_LETTERS = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
+RUSSIAN_LETTERS = "абвгдеёжзийклмнопрстуфхцчшщыьэюя"
 
 # ---------------------------------------------------------------------------
 # Current layout (from chord_data.dart) for diff output

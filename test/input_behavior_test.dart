@@ -51,7 +51,7 @@ void main() {
 
     expect(_progress(tester), 0);
     expect(find.text('Press Backspace to fix the mistake'), findsNothing);
-    expect(_keyColor(tester, 8), _colors(tester).tertiaryContainer);
+    expect(_keyColor(tester, 4), _colors(tester).tertiaryContainer);
   });
 
   testWidgets(
@@ -63,7 +63,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byKey(const ValueKey<String>('chord-hint')), findsOneWidget);
-      expect(_keyColor(tester, 8), _colors(tester).tertiaryContainer);
+      expect(_keyColor(tester, 4), _colors(tester).tertiaryContainer);
 
       await tester.tap(find.byTooltip('Hide chord hint'));
       await tester.pumpAndSettle();

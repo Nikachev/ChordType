@@ -19,8 +19,8 @@ void main() {
         activeModifier: null,
       );
 
-      expect(english?.text, 't');
-      expect(russian?.text, 'а');
+      expect(english?.text, 'o');
+      expect(russian?.text, 'е');
     });
 
     test('gives controls and modifiers priority over armed layers', () {
@@ -64,7 +64,7 @@ void main() {
       );
       expect(
         _planMasks(engine, '!'),
-        <int>[46],
+        <int>[7],
       );
       expect(
         _planMasks(engine, '0'),
@@ -99,7 +99,7 @@ void main() {
 
       expect(
         steps.map((ChordStep step) => step.mask),
-        <int>[layoutSwitchChord, shiftChord, 31],
+        <int>[layoutSwitchChord, shiftChord, 29],
       );
       expect(steps.first.switchTo, CourseLanguage.english);
     });

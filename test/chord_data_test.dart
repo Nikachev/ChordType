@@ -45,7 +45,7 @@ void main() {
         ...layout.languageSymbols.keys,
       };
 
-      expect(layoutMasks, hasLength(33));
+      expect(layoutMasks, hasLength(layout == englishLayout ? 32 : 32));
       expect(layoutMasks.intersection(commonActions.keys.toSet()), isEmpty);
       expect(
         <int>{...layoutMasks, ...commonActions.keys},
@@ -111,7 +111,6 @@ void main() {
       'ч',
       'ш',
       'щ',
-      'ъ',
       'ы',
       'ь',
       'э',
@@ -132,20 +131,21 @@ void main() {
     );
     expect(
       englishLayout.languageSymbols.values.toSet(),
-      <String>{r'$', '[', ']', '&', '_', '+', '='},
+      <String>{"'", r'$', '[', '_', '&', '#'},
     );
   });
 
-  test('all eight shared punctuation pairs use identical shared chords', () {
+  test('all nine shared punctuation pairs use identical shared chords', () {
     const Map<int, String> expected = <int, String>{
       26: '.',
-      21: '?',
       14: ',',
-      35: ')',
-      37: "'",
-      46: '!',
-      29: '-',
+      41: ')',
+      35: '?',
+      7: '!',
+      46: '-',
+      39: ':',
       15: '(',
+      31: '"',
     };
 
     for (final MapEntry<int, String> entry in expected.entries) {
@@ -157,7 +157,7 @@ void main() {
 
     expect(
       expected.values.map(shiftedOutputFor).toSet(),
-      <String>{'%', ';', '*', '>', '/', '<', '"', ':'},
+      <String>{'+', ']', '%', '=', '*', ';', '>', '/', '<'},
     );
   });
 
@@ -246,11 +246,12 @@ void main() {
   test('Shift output applies to base letters and punctuation only', () {
     expect(shiftedOutputFor('a'), 'A');
     expect(shiftedOutputFor('я'), 'Я');
-    expect(shiftedOutputFor('?'), ';');
-    expect(shiftedOutputFor(')'), '>');
-    expect(shiftedOutputFor('['), '~');
+    expect(shiftedOutputFor('?'), '=');
+    expect(shiftedOutputFor(')'), '%');
+    expect(shiftedOutputFor('['), '^');
     expect(shiftedOutputFor('{'), '{');
     expect(shiftedOutputFor('}'), '}');
     expect(shiftedOutputFor('1'), '1');
+    expect(shiftedOutputFor('ь'), 'ъ');
   });
 }

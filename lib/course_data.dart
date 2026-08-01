@@ -264,8 +264,8 @@ const List<TrainingCourse> courses = <TrainingCourse>[
         id: 'ru-chat-04',
         stage: LessonStage.foundations,
         title: 'Редкие буквы',
-        focus: 'ё ж ш щ э ф ъ ц ю й',
-        target: 'ёж ждёт чай у подъезда щенок ищет мяч фея машет юле эхо '
+        focus: 'ё ж ш щ э ф ц ю й',
+        target: 'ёж ждёт чай у школы щенок ищет мяч фея машет юле эхо '
             'звучит в цехе',
       ),
       TrainingLesson(
@@ -296,7 +296,7 @@ const List<TrainingCourse> courses = <TrainingCourse>[
         skills: <LessonSkill>{LessonSkill.shift},
         title: 'Имена и Shift',
         focus: 'одноразовый Shift и имена',
-        target: 'Привет, Маша. Я с Олегом. Ты свободна?',
+        target: 'Привет, Маша. Я с Олегом. У подъезда. Ты свободна?',
       ),
       TrainingLesson(
         id: 'ru-chat-09',
@@ -312,8 +312,7 @@ const List<TrainingCourse> courses = <TrainingCourse>[
         skills: <LessonSkill>{
           LessonSkill.shift,
           LessonSkill.enter,
-          LessonSkill.numbersAndSymbols,
-          LessonSkill.layoutSwitch
+          LessonSkill.numbersAndSymbols
         },
         title: 'Время и числа',
         focus: 'прямой слой цифр и символов в договорённостях',
@@ -349,7 +348,7 @@ const List<TrainingCourse> courses = <TrainingCourse>[
         target: 'Отправь "черновик" для @oleg_home в #plans (важно).\n'
             'Открой https://example.com/chat?mode=work; отметь {готово}, '
             'сравни 3<5>1, напиши "да" и \'нет\', '
-            'затем проверь слово-слово. Скидка 10% и 5*5.',
+            'затем проверь слово-слово. Скидка 10%, итого 5*5=] готово.',
       ),
       TrainingLesson(
         id: 'ru-chat-13',
